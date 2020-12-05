@@ -66,7 +66,7 @@ HRESULT CLR_RT_ExecutionEngine::ExecutionEngine_Initialize()
 #if !defined(NANOCLR_APPDOMAINS)
     m_globalLock = NULL;           // CLR_RT_HeapBlock*                   m_globalLock;
     m_outOfMemoryException = NULL; // CLR_RT_HeapBlock*                   m_outOfMemoryException;
-#endif                             //
+#endif //
 
     m_currentUICulture = NULL; // CLR_RT_HeapBlock*                   m_currentUICulture;
 
@@ -77,7 +77,7 @@ HRESULT CLR_RT_ExecutionEngine::ExecutionEngine_Initialize()
 
 #if defined(NANOCLR_ENABLE_SOURCELEVELDEBUGGING)
     m_scratchPadArray = NULL; // CLR_RT_HeapBlock_Array*             m_scratchPadArray;
-#endif                        //#if defined(NANOCLR_ENABLE_SOURCELEVELDEBUGGING)
+#endif //#if defined(NANOCLR_ENABLE_SOURCELEVELDEBUGGING)
 
 #if defined(NANOCLR_APPDOMAINS)
     m_appDomains.DblLinkedList_Initialize(); // CLR_RT_DblLinkedList                m_appDomains;
@@ -874,7 +874,7 @@ void CLR_RT_ExecutionEngine::SpawnStaticConstructor(CLR_RT_Thread *&pCctorThread
     // 1. Destroy constructor thread.
     pCctorThread->DestroyInstance();
 }
-#else  // NANOCLR_APPDOMAINS
+#else // NANOCLR_APPDOMAINS
 
 bool CLR_RT_ExecutionEngine::SpawnStaticConstructorHelper(CLR_RT_Assembly *assembly, const CLR_RT_MethodDef_Index &idx)
 {
@@ -1797,7 +1797,8 @@ HRESULT CLR_RT_ExecutionEngine::InitializeLocals(
         while (true)
         {
             dt = CLR_UncompressElementType(sig);
-            if (dt == DATATYPE_VOID) //there should never have been a local variable of type void, unless it's generic type
+            if (dt ==
+                DATATYPE_VOID) // there should never have been a local variable of type void, unless it's generic type
             {
                 dt = DATATYPE_OBJECT;
             }
@@ -2063,7 +2064,7 @@ HRESULT CLR_RT_ExecutionEngine::NewObject(CLR_RT_HeapBlock &reference, CLR_UINT3
 
     CLR_RT_TypeDef_Instance res;
 
-    if (res.ResolveToken( tk, assm, &reference ) == false)
+    if (res.ResolveToken(tk, assm, &reference) == false)
         NANOCLR_SET_AND_LEAVE(CLR_E_WRONG_TYPE);
 
     NANOCLR_CHECK_HRESULT(NewObjectFromIndex(reference, res));
