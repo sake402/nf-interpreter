@@ -798,10 +798,24 @@ struct CLR_RT_HeapBlock
 
     //--//
 
-    CLR_DataType DataType() const
+    CLR_DataType DataType() const // FIX: To handle generic types
     {
-        return (CLR_DataType)m_id.type.dataType;
+        CLR_DataType dataType = (CLR_DataType)m_id.type.dataType;
+        if (dataType == DATATYPE_VOID)
+        {
+            dataType = dataType;
+            //if (genericType != DATATYPE_VOID)
+            //    return genericType;
+            //// TODO: this will sometimes fail if the generic datatype is not a reference type 
+            //CLR_RT_HeapBlock *ref = Dereference(); 
+            //if (ref != NULL)
+            //{
+            //    dataType = ref->DataType();
+            //}
+        }
+        return dataType;
     }
+
     CLR_UINT8 DataFlags() const
     {
         return m_id.type.flags;
