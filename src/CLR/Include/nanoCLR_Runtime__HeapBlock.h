@@ -804,11 +804,11 @@ struct CLR_RT_HeapBlock
         if (dataType == DATATYPE_VOID)
         {
             dataType = dataType;
-            //if (genericType != DATATYPE_VOID)
+            // if (genericType != DATATYPE_VOID)
             //    return genericType;
-            //// TODO: this will sometimes fail if the generic datatype is not a reference type 
-            //CLR_RT_HeapBlock *ref = Dereference(); 
-            //if (ref != NULL)
+            //// TODO: this will sometimes fail if the generic datatype is not a reference type
+            // CLR_RT_HeapBlock *ref = Dereference();
+            // if (ref != NULL)
             //{
             //    dataType = ref->DataType();
             //}
