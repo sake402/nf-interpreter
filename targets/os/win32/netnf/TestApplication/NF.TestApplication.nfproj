@@ -19,6 +19,10 @@
   </PropertyGroup>
   <Import Project="$(NanoFrameworkProjectSystemPath)NFProjectSystem.props" Condition="Exists('$(NanoFrameworkProjectSystemPath)NFProjectSystem.props')" />
   <ItemGroup>
+    <Compile Include="SimCom\GPRS.cs" />
+    <Compile Include="SimCom\SIM800.cs" />
+    <Compile Include="SimCom\Sim800Connector.cs" />
+    <Compile Include="SimCom\Socket.cs" />
     <Compile Include="System\Runtime\CompilerServices\AsyncTaskMethodBuilder.cs" />
     <Compile Include="System\Runtime\CompilerServices\AsyncVoidMethodBuilder.cs" />
     <Compile Include="System\Runtime\CompilerServices\IAsyncStateMachine.cs" />

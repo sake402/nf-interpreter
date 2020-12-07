@@ -1,3 +1,4 @@
+using NanoTest.Remote.SIM800;
 using System;
 using System.Diagnostics;
 using System.Threading;
@@ -112,7 +113,12 @@ namespace NF.TestApplication_NEW
 
         public static void Main()
         {
+<<<<<<< Updated upstream
             //Debug.WriteLine("Hello");
+=======
+            new Sim800Connector("portals.sake.org.ng");
+            Debug.WriteLine("Hello");
+>>>>>>> Stashed changes
             var m = new GenericClass<int>();
             m.InstanceGenericDo(1);
             m.InstanceGenericDo2(1, "OK");

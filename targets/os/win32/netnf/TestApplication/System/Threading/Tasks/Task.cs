@@ -6,10 +6,15 @@ namespace System.Threading.Tasks
 {
     public class Task
     {
-        public static Task<TResult> FromEvent<TResult>(EventHandler<TResult> callback)
+        public static Task<TResult> FromEvent<TResult>(Action<EventHandler<TResult>> register, Action<EventHandler<TResult>> unRegister)
         {
             var tcs = new TaskCompletionSource<TResult>();
-            callback += (s, e) => tcs.SetResult(e);
+            void Evented(object sender, TResult arg)
+            {
+                unRegister(Evented);
+                tcs.SetResult(arg);
+            }
+            register(Evented);
             return tcs.Task;
         }
 
@@ -78,6 +83,12 @@ namespace System.Threading.Tasks
         ArrayList _continuations = new ArrayList();
         public bool IsCompleted { get; protected set; }
         public Exception Exception { get; protected set; }
+<<<<<<< Updated upstream
+=======
+        public bool IsCompletedSuccessfully => IsCompleted && Exception == null;
+        protected enum Flags { ContinueOnSameContext = 1 }
+        protected Flags flags = Flags.ContinueOnSameContext;
+>>>>>>> Stashed changes
 
         public Task()
         {
@@ -93,7 +104,18 @@ namespace System.Threading.Tasks
                 {
                     action();
                     Debug.WriteLine("Calling Complete");
+<<<<<<< Updated upstream
                     Complete();
+=======
+                    if (flags.HasFlag(Flags.ContinueOnSameContext))
+                    {
+                        syncContext.Post((__) => Complete(), null);
+                    }
+                    else
+                    {
+                        Complete();
+                    }
+>>>>>>> Stashed changes
                     Debug.WriteLine("Called Complete");
                 }
                 //catch (Exception e)
@@ -121,6 +143,29 @@ namespace System.Threading.Tasks
             return awaiter;
         }
 
+<<<<<<< Updated upstream
+=======
+        public Task ContinueWith(Action continuation)
+        {
+            Task task = new Task();
+            task.OnCompleted(continuation);
+            OnCompleted(() =>
+            {
+                task.Complete();
+            });
+            return task;
+        }
+
+        public Task ConfigureAwait(bool continueOnSameContext = true)
+        {
+            if (continueOnSameContext == false)
+            {
+                flags &= ~Flags.ContinueOnSameContext;
+            }
+            return this;
+        }
+
+>>>>>>> Stashed changes
         internal void OnCompleted(Action continuation)
         {
             if (IsCompleted)
@@ -192,16 +237,54 @@ namespace System.Threading.Tasks
                 //try
                 //{
                     var result = action();
+<<<<<<< Updated upstream
                     Complete(result);
                 //}catch(Exception e)
                 //{
                 //    CompleteWithException(e);
                 //}
+=======
+                    if (flags.HasFlag(Flags.ContinueOnSameContext))
+                    {
+                        syncContext.Post((r) => Complete((TResult)r), result);
+                    }
+                    else
+                    {
+                        Complete(result);
+                    }
+                }
+                catch (Exception e)
+                {
+                    syncContext.Post((ex) => CompleteWithException((Exception)ex), e);
+                }
+>>>>>>> Stashed changes
                 Debug.WriteLine("Task<T>:End");
             }).Start();
             Debug.WriteLine("Task<T>:ctor(action):ends");
         }
 
+<<<<<<< Updated upstream
+=======
+        public Task<TNewResult> ContinueWith<TNewResult>(Func<TResult, TNewResult> continuation)
+        {
+            Task<TNewResult> task = new Task<TNewResult>();
+            OnCompleted((result) =>
+            {
+                task.Complete(continuation(result));
+            });
+            return task;
+        }
+
+        public new Task<TResult> ConfigureAwait(bool continueOnSameContext = true)
+        {
+            if (continueOnSameContext == false)
+            {
+                flags &= ~Flags.ContinueOnSameContext;
+            }
+            return this;
+        }
+
+>>>>>>> Stashed changes
         internal void OnCompleted(Action<TResult> continuation)
         {
             OnCompleted(() => continuation(GetResult()));
